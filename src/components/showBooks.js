@@ -6,8 +6,7 @@ class showBooks extends Component {
   state = {  }
   shelfOptions = [{ title: 'read', description: 'Read' }, { title: 'wantToRead', description: 'Want to Read' }, { title: 'currentlyReading', description: 'Currently Reading' }]
   render() { 
-    const { books, isLoaded, shelfInfo } = this.props
-    console.log(shelfInfo.title)
+    const { books, isLoaded, shelfInfo, onChangeShelf } = this.props
     return ( 
       <div className="bookshelf-books">
         <ol className="books-grid">
@@ -19,8 +18,8 @@ class showBooks extends Component {
                 <div className="book-shelf-changer">
                   <select value={book.shelf} onChange={async (e) => {
                     book.shelf = e.target.value
-                    this.forceUpdate();
                     await BooksAPI.update(book, e.target.value)
+                    onChangeShelf(book)
                     }}>
                     <option value="move" disabled>Move to...</option>
                     {this.shelfOptions.map((t) => (
@@ -31,7 +30,7 @@ class showBooks extends Component {
                 </div>
               </div>
               <div className="book-title">{book.title}</div>
-              <div className="book-authors">{book.authors}</div>
+              <div className="book-authors" onClick={onChangeShelf}>{book.authors}</div>
             </div>
           </li>
           ): 'Loading...'} 
