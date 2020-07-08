@@ -10,6 +10,8 @@ class BooksApp extends React.Component {
     error: null,
     isLoaded: false,
     books: [],
+    tempBooks: [],
+    query: ''
   };
 
   componentDidMount() {
@@ -32,8 +34,9 @@ class BooksApp extends React.Component {
     updatedBooks[getIndexOfBook] = {...updatedBooks[getIndexOfBook], shelf:book.shelf}
     this.setState({books: updatedBooks})
   }
-    
 
+
+    
   render() {
     return (
       <div className="app">
@@ -49,19 +52,19 @@ class BooksApp extends React.Component {
                 <div>
                   <div className="bookshelf">
                     <h2 className="bookshelf-title">Currently Reading</h2>
-                    <ShowBooks books={this.state.books.filter((b) => b.shelf ==='currentlyReading')} error={this.state.error} isLoaded={this.state.isLoaded} shelfInfo={{title: "currentlyReading", description: "Currently Reading"}} onChangeShelf={this.changeShelf}/>
+                    <ShowBooks books={this.state.books.filter((b) => b.shelf ==='currentlyReading')}  isLoaded={this.state.isLoaded} shelfInfo={{title: "currentlyReading", description: "Currently Reading"}} onChangeShelf={this.changeShelf}/>
                   </div>
                 </div>
                 <div>
                   <div className="bookshelf">
                     <h2 className="bookshelf-title">Want To Read</h2>
-                    <ShowBooks books={this.state.books.filter((b) => b.shelf ==='wantToRead')} error={this.state.error} isLoaded={this.state.isLoaded} shelfInfo={{title: "wantToRead", description: "Want To Read"}} onChangeShelf={this.changeShelf}/>
+                    <ShowBooks books={this.state.books.filter((b) => b.shelf ==='wantToRead')}  isLoaded={this.state.isLoaded} shelfInfo={{title: "wantToRead", description: "Want To Read"}} onChangeShelf={this.changeShelf}/>
                   </div>
                 </div>
                 <div>
                   <div className="bookshelf">
                     <h2 className="bookshelf-title">Read</h2>
-                    <ShowBooks books={this.state.books.filter((b) => b.shelf ==='read')} error={this.state.error} isLoaded={this.state.isLoaded} shelfInfo={{title: "read", description: "Read"}} onChangeShelf={this.changeShelf}/>
+                    <ShowBooks books={this.state.books.filter((b) => b.shelf ==='read')} isLoaded={this.state.isLoaded} shelfInfo={{title: "read", description: "Read"}} onChangeShelf={this.changeShelf}/>
                   </div>
                 </div>
               </div>
@@ -75,7 +78,22 @@ class BooksApp extends React.Component {
             </div>
           )}
         />
-        <Route exact path="/search" render={(history) => <SearchBooks />} />
+        <Route exact path="/search" render={(history) => 
+         <div>
+         <div className="bookshelf">
+           <h2 className="bookshelf-title">Read</h2>
+            <SearchBooks 
+              books={this.state.books}
+              shelfOptions={this.shelfOptions} 
+              isLoaded={this.state.isLoaded} 
+              shelfInfo={{title: "read", description: "Read"}} 
+              onChangeShelf={this.changeShelf}
+            />
+          </div>
+         </div>
+
+          
+        } />
       </div>
     )
   }  

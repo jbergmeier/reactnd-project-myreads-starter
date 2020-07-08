@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
-import BooksApp from '../App';
 import * as BooksAPI from '../BooksAPI';
 
 class showBooks extends Component {
   state = {  }
-  shelfOptions = [{ title: 'read', description: 'Read' }, { title: 'wantToRead', description: 'Want to Read' }, { title: 'currentlyReading', description: 'Currently Reading' }]
+
+  
   render() { 
-    const { books, isLoaded, shelfInfo, onChangeShelf } = this.props
+    const shelfOptions = [{ title: 'read', description: 'Read' }, { title: 'wantToRead', description: 'Want to Read' }, { title: 'currentlyReading', description: 'Currently Reading' }]
+    const { books, isLoaded, onChangeShelf } = this.props
     return ( 
       <div className="bookshelf-books">
         <ol className="books-grid">
-          {isLoaded ? books.map((book) => 
+          {isLoaded && books !== ''? books.map((book) => 
           <li key={book.id}>
             <div className="book">
               <div className="book-top">
@@ -20,9 +21,10 @@ class showBooks extends Component {
                     book.shelf = e.target.value
                     await BooksAPI.update(book, e.target.value)
                     onChangeShelf(book)
+                    this.forceUpdate()
                     }}>
                     <option value="move" disabled>Move to...</option>
-                    {this.shelfOptions.map((t) => (
+                    {shelfOptions.map((t) => (
                       <option key={t.title} value={t.title}>{t.description}</option>
                       ))}
                     <option value="none">None</option>
@@ -30,7 +32,7 @@ class showBooks extends Component {
                 </div>
               </div>
               <div className="book-title">{book.title}</div>
-              <div className="book-authors" onClick={onChangeShelf}>{book.authors}</div>
+              <div className="book-authors">{book.authors}</div>
             </div>
           </li>
           ): 'Loading...'} 
