@@ -1,49 +1,59 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import * as BooksAPI from '../BooksAPI';
-import ShowBooks from './showBooks'
+import ShowBooks from './showBooks';
 
 class SearchBooks extends Component {
   state = {
-    query:'',
-    tempBooks: [],
-    isLoadingSearch: false
+    query: '',
+    isLoadingSearch: false,
   };
 
-  updateQuery = (query) => {
-    console.log(query)
-    BooksAPI.search(query).then((tempBooks) => {
-      this.setState(() => ({
-        isLoadingSearch: true,
-        tempBooks,
-      }))})
-  }
+  handleChange = (e) => {
+    const newValue = e.target.value;
+    this.setState({ query: newValue }, () => {
+      this.props.search(newValue);
+    });
+  };
 
   render() {
-    const { query, tempBooks } = this.state
-    const { books, isLoaded } = this.props
+    const { query, tempBooks } = this.state;
+    const {
+      isLoaded,
+      search,
+      searchedBooks,
+      onChangeShelf,
+      books,
+    } = this.props;
     return (
-      <div className="search-books">
-      <div className="search-books-bar">
-        {console.log(query)}
-        <Link to="/">
-          <button className="close-search">Close</button>
-        </Link>
-        <div className="search-books-input-wrapper">
-          <input 
-            type="text" 
-            placeholder="Search by title or author" 
-            value={query}
-            onChange={(e) => this.updateQuery(e.target.value)}
-          />
+      <div className='search-books'>
+        <div className='search-books-bar'>
+          {console.log(query)}
+          <Link to='/'>
+            <button className='close-search'>Close</button>
+          </Link>
+          <div className='search-books-input-wrapper'>
+            <input
+              type='text'
+              placeholder='Search by title or author'
+              value={query}
+              onChange={this.handleChange}
+            />
+          </div>
+        </div>
+        <div className='search-books-results'>
+          <ol className='books-grid'>
+            <ShowBooks
+              books={searchedBooks}
+              onChangeShelf={onChangeShelf}
+              isLoaded={isLoaded}
+            />
+            {console.log(books)}
+          </ol>
         </div>
       </div>
-      <div className="search-books-results">
-        <ol className="books-grid">
-        <ShowBooks books={tempBooks} isLoaded={isLoaded}/>
-        </ol>
-      </div>
-    </div>
-    )}}
+    );
+  }
+}
 
 export default SearchBooks;
