@@ -16,19 +16,19 @@ class SearchBooks extends Component {
     });
   };
 
+
   render() {
-    const { query, tempBooks } = this.state;
+    const { query } = this.state;
     const {
       isLoaded,
-      search,
       searchedBooks,
       onChangeShelf,
+      onClearTempBooks,
       books,
     } = this.props;
     return (
       <div className='search-books'>
         <div className='search-books-bar'>
-          {console.log(query)}
           <Link to='/'>
             <button className='close-search'>Close</button>
           </Link>

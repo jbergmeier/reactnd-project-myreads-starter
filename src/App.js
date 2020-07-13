@@ -31,16 +31,28 @@ class BooksApp extends React.Component {
   }
 
   changeShelf = (book) => {
+    console.log("search new Book added: ", book)
     const getIndexOfBook = this.state.books.findIndex(
       (old_book) => old_book.id === book.id
     );
     let updatedBooks = [...this.state.books];
-    updatedBooks[getIndexOfBook] = {
-      ...updatedBooks[getIndexOfBook],
-      shelf: book.shelf,
+    if(getIndexOfBook !== -1 ) {
+      console.log("Index of Old Book", getIndexOfBook)
+      updatedBooks[getIndexOfBook] = {
+        ...updatedBooks[getIndexOfBook],
+        shelf: book.shelf,
+      };
+      this.setState({ books: updatedBooks });
+    }else {
+      updatedBooks.push(book) 
+      console.log("added new book")
+      this.setState({ books: updatedBooks });
+    }
     };
-    this.setState({ books: updatedBooks });
-  };
+
+    clearTempBooks = () => {
+      this.setState.tempBooks = []
+    }
 
   onSearch = (query) => {
     if (query.length > 0) {
@@ -48,6 +60,7 @@ class BooksApp extends React.Component {
         if (books.error) {
           this.setState({ tempBooks: [] });
         } else {
+          
           this.setState({ tempBooks: books });
         }
       });
@@ -76,10 +89,6 @@ class BooksApp extends React.Component {
                         (b) => b.shelf === 'currentlyReading'
                       )}
                       isLoaded={this.state.isLoaded}
-                      shelfInfo={{
-                        title: 'currentlyReading',
-                        description: 'Currently Reading',
-                      }}
                       onChangeShelf={this.changeShelf}
                     />
                   </div>
@@ -92,10 +101,6 @@ class BooksApp extends React.Component {
                         (b) => b.shelf === 'wantToRead'
                       )}
                       isLoaded={this.state.isLoaded}
-                      shelfInfo={{
-                        title: 'wantToRead',
-                        description: 'Want To Read',
-                      }}
                       onChangeShelf={this.changeShelf}
                     />
                   </div>
@@ -106,7 +111,6 @@ class BooksApp extends React.Component {
                     <ShowBooks
                       books={this.state.books.filter((b) => b.shelf === 'read')}
                       isLoaded={this.state.isLoaded}
-                      shelfInfo={{ title: 'read', description: 'Read' }}
                       onChangeShelf={this.changeShelf}
                     />
                   </div>
@@ -137,6 +141,7 @@ class BooksApp extends React.Component {
                   searchedBooks={this.state.tempBooks}
                   search={this.onSearch}
                   onChangeShelf={this.changeShelf}
+                  onClearTempBooks={this.clearTempBooks}
                 />
               </div>
             </div>

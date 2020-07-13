@@ -29,7 +29,7 @@ class showBooks extends Component {
                       ></div>
                       <div className='book-shelf-changer'>
                         <select
-                          value={book.shelf}
+                          value={book.shelf} 
                           onChange={async (e) => {
                             book.shelf = e.target.value;
                             await BooksAPI.update(book, e.target.value);
@@ -42,9 +42,11 @@ class showBooks extends Component {
                             Move to...
                           </option>
                           {shelfOptions.map((t) => (
+                         
                             <option key={t.title} value={t.title}>
-                              {t.description}
-                            </option>
+                            {t.description}
+                           
+                          </option>
                           ))}
                           <option value='none'>None</option>
                         </select>
