@@ -3,14 +3,21 @@ import * as BooksAPI from '../BooksAPI';
 
 class showBooks extends Component {
   state = {};
-
+  
+  getShelfValue = (bookId) => {
+    
+    if(this.props.originalBooks && this.props.books) {
+      const final = this.props.originalBooks.find((e) => e.id===bookId)
+      if(final){return final.shelf}
+    }else {return "none"}
+  }
   render() {
     const shelfOptions = [
       { title: 'read', description: 'Read' },
       { title: 'wantToRead', description: 'Want to Read' },
       { title: 'currentlyReading', description: 'Currently Reading' },
     ];
-    const { books, isLoaded, onChangeShelf } = this.props;
+    const { books, isLoaded, onChangeShelf, originalBooks } = this.props;
     return (
       <div className='bookshelf-books'>
         <ol className='books-grid'>
@@ -29,7 +36,7 @@ class showBooks extends Component {
                       ></div>
                       <div className='book-shelf-changer'>
                         <select
-                          value={book.shelf} 
+                          value={book.shelf ? book.shelf : this.getShelfValue(book.id)} 
                           onChange={async (e) => {
                             book.shelf = e.target.value;
                             await BooksAPI.update(book, e.target.value);

@@ -23,7 +23,6 @@ class SearchBooks extends Component {
       isLoaded,
       searchedBooks,
       onChangeShelf,
-      onClearTempBooks,
       books,
     } = this.props;
     return (
@@ -45,6 +44,7 @@ class SearchBooks extends Component {
           <ol className='books-grid'>
             <ShowBooks
               books={searchedBooks}
+              originalBooks={books}
               onChangeShelf={onChangeShelf}
               isLoaded={isLoaded}
             />
